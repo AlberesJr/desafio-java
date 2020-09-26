@@ -46,13 +46,18 @@ public class CarResource {
     @PostMapping(value = "/cars")
     public ResponseEntity<Car> createCar(@RequestBody Car car, @RequestParam String login) throws Exception {
         User user = userService.findByLogin(login);
-        car.setUser(user);
-        Car obj = carService.create(car);
-        return new ResponseEntity<>(obj, HttpStatus.CREATED);
+        if (user != null) {
+            car.setUser(user);
+            Car obj = carService.create(car);
+            return new ResponseEntity<>(obj, HttpStatus.CREATED);
+        }
+        throw new Exception();
     }
 
     @PutMapping(value = "/cars/{id}")
-    public ResponseEntity<Car> update(@RequestBody Car obj, @PathVariable Integer id) {
+    public ResponseEntity<Car> update(@RequestBody Car obj, @PathVariable Integer id, @RequestParam String login) {
+        User user = userService.findByLogin(login);
+        obj.setUser(user);
         obj.setId(id);
         obj = carService.update(obj);
         return ResponseEntity.noContent().build();

@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] PUBLIC_ENDPOINTS = {
         "/h2-console/**",
-        "/api/**"
+        "/api/users/**"
     };
 
     @Override
