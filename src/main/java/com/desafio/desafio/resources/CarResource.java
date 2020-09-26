@@ -20,8 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping(value = "/api")
+@Api(tags = {"Carros"})
 public class CarResource {
     
     @Autowired
@@ -31,6 +35,7 @@ public class CarResource {
     private UserService userService;
 
     @GetMapping(value = "/cars")
+    @ApiOperation(tags = {"Carros"}, value = "Lista todos os carros do usuário logado")
     public ResponseEntity<List<Car>> findAllByUser(@RequestParam Integer userId){
         User user = userService.find(userId);
         List<Car> cars = carService.findAllByUser(user);
@@ -38,12 +43,14 @@ public class CarResource {
     }
 
     @GetMapping(value = "/cars/{id}")
+    @ApiOperation(tags = {"Carros"}, value = "Busca um carro do usuário logado pelo id")
     public ResponseEntity<Car> find(@PathVariable Integer id){
         Car obj = carService.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
     @PostMapping(value = "/cars")
+    @ApiOperation(tags = {"Carros"}, value = "Cadastra um novo carro para o usuário logado")
     public ResponseEntity<Car> createCar(@RequestBody Car car, @RequestParam String login) throws Exception {
         User user = userService.findByLogin(login);
         if (user != null) {
@@ -55,6 +62,7 @@ public class CarResource {
     }
 
     @PutMapping(value = "/cars/{id}")
+    @ApiOperation(tags = {"Carros"}, value = "Atualiza um carro do usuário logado pelo id")
     public ResponseEntity<Car> update(@RequestBody Car obj, @PathVariable Integer id, @RequestParam String login) {
         User user = userService.findByLogin(login);
         obj.setUser(user);
@@ -64,6 +72,7 @@ public class CarResource {
     }
 
     @DeleteMapping(value = "/cars/{id}")
+    @ApiOperation(tags = {"Carros"}, value = "Remove um carro do usuário logado pelo id")
     public ResponseEntity<Car> delete(@PathVariable Integer id){
         carService.delete(id);
         return ResponseEntity.noContent().build();
