@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-DesafioApplication<desafio>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.desafio.desafio.DesafioApplication",
+            "projectName": "desafio",
+            "args": ""
+        }
+    ]
+}
