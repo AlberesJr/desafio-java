@@ -2,10 +2,11 @@ package com.desafio.desafio.resources;
 
 import com.desafio.desafio.domain.Car;
 import com.desafio.desafio.domain.User;
+import com.desafio.desafio.dto.CarDTO;
 import com.desafio.desafio.dto.UserDTO;
 import com.desafio.desafio.exceptions.ErrorMessage;
-import com.desafio.desafio.service.CarService;
-import com.desafio.desafio.service.UserService;
+import com.desafio.desafio.services.CarService;
+import com.desafio.desafio.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,11 +21,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import java.util.Date;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -87,10 +91,13 @@ public class UserResource {
         user.setCreatedAt(new java.sql.Timestamp(now.getTime()));
 
         UserDTO userDto = new UserDTO(userService.create(user));
+        List<CarDTO> carsDTOs = new ArrayList<>();
         for (Car car : user.getCars()) {
             car.setUser(user);
-            carService.create(car);
+            carService.createByUser(car);
+            carsDTOs.add(new CarDTO(car));
         }
+        userDto.setCars(carsDTOs);
         return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
 
@@ -120,6 +127,14 @@ public class UserResource {
     public ResponseEntity<User> delete(@PathVariable Integer id){
         userService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/users/picture")
+    @ApiOperation(tags = {"Usuários"}, value = "Faz o upload de imagem do usário")
+    public ResponseEntity<Void> uploadProfilePicture(@RequestParam(name = "file") MultipartFile multipartFile)
+            throws Exception {
+        URI uri = userService.uploadUserPicture(multipartFile);
+        return ResponseEntity.created(uri).build();
     }
     
 }

@@ -31,6 +31,7 @@ public class Car {
     private String licensePlate;
     private String model;
     private String color;
+    private String imageUrl;
 
     @JsonIgnore
     @ManyToOne

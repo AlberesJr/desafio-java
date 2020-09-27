@@ -44,6 +44,7 @@ public class User {
     private String phone;
     private Date createdAt;
     private Date lastLogin;
+    private String imageUrl;
     @OneToMany(mappedBy = "user")
     private List<Car> cars = new ArrayList<>();
 }

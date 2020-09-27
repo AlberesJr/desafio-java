@@ -6,7 +6,7 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 
 import com.desafio.desafio.domain.User;
-import com.desafio.desafio.service.UserService;
+import com.desafio.desafio.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

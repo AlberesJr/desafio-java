@@ -1,14 +1,17 @@
-package com.desafio.desafio.service;
+package com.desafio.desafio.services;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 import com.desafio.desafio.domain.User;
 import com.desafio.desafio.repositories.UserRepository;
+import com.desafio.desafio.security.UserSpringSecurity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UserService {
@@ -18,6 +21,9 @@ public class UserService {
     
     @Autowired
     private UserRepository repo;
+
+    @Autowired
+    private S3Service s3Service;
 
     public List<User> findAll() {
         return repo.findAll();
@@ -55,5 +61,20 @@ public class UserService {
 	public User update(User obj) {
         find(obj.getId());
 		return repo.save(obj);
-	}
+    }
+    
+    public URI uploadUserPicture(MultipartFile multipartFile) throws Exception {
+
+        UserSpringSecurity userSS = UserSpringSecurityService.authenticated();
+        if (userSS == null) {
+            throw new Exception();
+        }
+        URI uri =  s3Service.uploadFile(multipartFile, "/user");
+        
+        User user = find(userSS.getId());
+        user.setImageUrl(uri.toString());
+        repo.save(user);
+
+        return uri;
+    }
 }

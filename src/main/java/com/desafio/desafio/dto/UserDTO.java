@@ -15,7 +15,6 @@ import lombok.Setter;
 @Setter
 public class UserDTO {
 
-    private Integer id;
     private String firstName;
     private String lastName;
     private String email;
@@ -24,10 +23,9 @@ public class UserDTO {
     private String password;
     private String phone;
 
-    private List<Car> cars = new ArrayList<>();
+    private List<CarDTO> cars = new ArrayList<>();
 
     public UserDTO(User user) {
-        this.setId(user.getId());
         this.setFirstName(user.getFirstName());
         this.setLastName(user.getLastName());
         this.setEmail(user.getEmail());
@@ -35,7 +33,6 @@ public class UserDTO {
         this.setLogin(user.getLogin());
         this.setPassword(user.getPassword());
         this.setPhone(user.getPhone());
-        this.setCars(user.getCars());
     }
     
     
