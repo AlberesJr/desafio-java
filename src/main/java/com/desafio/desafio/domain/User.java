@@ -48,4 +48,22 @@ public class User {
     private String imageUrl;
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Car> cars = new ArrayList<>();
+
+    public User() {
+
+    }
+
+    public User(String firstName, String lastName, String email, LocalDate birthday, String login,
+            String password, String phone, Date createdAt) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.birthday = birthday;
+        this.login = login;
+        this.password = password;
+        this.phone = phone;
+        this.createdAt = createdAt;
+    }
+
+    
 }

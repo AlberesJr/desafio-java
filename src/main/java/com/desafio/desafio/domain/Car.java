@@ -37,5 +37,18 @@ public class Car {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Car() {
+
+    }
+
+    public Car(Integer id, int year, String licensePlate, String model, String color, User user) {
+        this.id = id;
+        this.year = year;
+        this.licensePlate = licensePlate;
+        this.model = model;
+        this.color = color;
+        this.user = user;
+    }
     
 }
