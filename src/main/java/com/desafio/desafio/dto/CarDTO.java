@@ -2,9 +2,6 @@ package com.desafio.desafio.dto;
 
 import com.desafio.desafio.domain.Car;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class CarDTO {
 
     private int year;

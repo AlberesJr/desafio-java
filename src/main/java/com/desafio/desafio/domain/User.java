@@ -14,9 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
 * Classe de objetos do tipo "User"
 * 

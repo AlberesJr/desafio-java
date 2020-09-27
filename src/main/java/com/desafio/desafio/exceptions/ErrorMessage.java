@@ -1,8 +1,5 @@
 package com.desafio.desafio.exceptions;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class ErrorMessage {
 
     private int errorCode;

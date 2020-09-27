@@ -1,8 +1,5 @@
 package com.desafio.desafio.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class CredetialsDTO {
     
     private String login;

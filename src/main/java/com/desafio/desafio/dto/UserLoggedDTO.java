@@ -11,9 +11,6 @@ import java.util.List;
 import com.desafio.desafio.domain.Car;
 import com.desafio.desafio.domain.User;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class UserLoggedDTO {
 
     private String firstName;
