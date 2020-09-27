@@ -1,4 +1,4 @@
-package com.desafio.desafio.service;
+package com.desafio.desafio.services;
 
 import java.util.Optional;
 

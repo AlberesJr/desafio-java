@@ -12,6 +12,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+* Classe de objetos do tipo "Car"
+* 
+* @author Alberes Jr
+* @version 1.0.0
+*/
+
 @Entity
 @Getter
 @Setter
@@ -24,10 +31,24 @@ public class Car {
     private String licensePlate;
     private String model;
     private String color;
+    private String imageUrl;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Car() {
+
+    }
+
+    public Car(Integer id, int year, String licensePlate, String model, String color, User user) {
+        this.id = id;
+        this.year = year;
+        this.licensePlate = licensePlate;
+        this.model = model;
+        this.color = color;
+        this.user = user;
+    }
     
 }
