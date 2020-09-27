@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.desafio.desafio.domain.User;
 import com.desafio.desafio.dto.CredetialsDTO;
+import com.desafio.desafio.dto.UserLoggedDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -58,11 +59,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         res.addHeader("Authorization", "Bearer " + token);
         res.setContentType("application/json");
         jwtUtil.updateUserLastLogin(login);
-        // User obj = jwtUtil.findUserByLogin(login);
-        // String json = new Gson().toJson(obj);
+        ObjectMapper mapper = new ObjectMapper();
+        UserLoggedDTO obj = new UserLoggedDTO(jwtUtil.findUserByLogin(login));
+        String json = mapper.writeValueAsString(obj);
         // System.out.println(json);
         // obj = new ObjectMapper().readValue(jsonSuccess(obj), User.class);
-        // res.getWriter().append(json);
+        res.getWriter().append(json);
     }
 
     private String jsonSuccess(User obj){

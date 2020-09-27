@@ -31,6 +31,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
 * Classe responsável pelo acesso de recursos de "User"
@@ -92,7 +93,12 @@ public class UserResource {
 
         UserDTO userDto = new UserDTO(userService.create(user));
         List<CarDTO> carsDTOs = new ArrayList<>();
+        final Pattern pattern = Pattern.compile("[aA-zZ]{3}-?[0-9]{4}");
         for (Car car : user.getCars()) {
+            if (!pattern.matcher(car.getLicensePlate()).matches()) {
+                er = new ErrorMessage("Invalid fields", 400);
+                return new ResponseEntity<Object>(er, new HttpHeaders(), HttpStatus.valueOf(er.getErrorCode()));
+            }
             car.setUser(user);
             carService.createByUser(car);
             carsDTOs.add(new CarDTO(car));

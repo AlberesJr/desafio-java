@@ -2,6 +2,7 @@ package com.desafio.desafio.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import com.desafio.desafio.domain.Car;
 import com.desafio.desafio.domain.User;
@@ -69,6 +70,12 @@ public class CarResource {
             ErrorMessage er = new ErrorMessage("License plate already exists", 400);
             return new ResponseEntity<Object>(er, new HttpHeaders(), HttpStatus.valueOf(er.getErrorCode()));
         }
+
+        final Pattern pattern = Pattern.compile("[aA-zZ]{3}-?[0-9]{4}");
+        if (!pattern.matcher(car.getLicensePlate()).matches()) {
+            ErrorMessage er = new ErrorMessage("Invalid fields", 400);
+            return new ResponseEntity<Object>(er, new HttpHeaders(), HttpStatus.valueOf(er.getErrorCode()));
+        }
         
         obj = carService.create(car);
         CarDTO carDto = new CarDTO(obj);
@@ -83,6 +90,12 @@ public class CarResource {
 
         if (obj != null) {
             ErrorMessage er = new ErrorMessage("License plate already exists", 400);
+            return new ResponseEntity<Object>(er, new HttpHeaders(), HttpStatus.valueOf(er.getErrorCode()));
+        }
+
+        final Pattern pattern = Pattern.compile("[aA-zZ]{3}-?[0-9]{4}");
+        if (!pattern.matcher(car.getLicensePlate()).matches()) {
+            ErrorMessage er = new ErrorMessage("Invalid fields", 400);
             return new ResponseEntity<Object>(er, new HttpHeaders(), HttpStatus.valueOf(er.getErrorCode()));
         }
         car.setId(id);
