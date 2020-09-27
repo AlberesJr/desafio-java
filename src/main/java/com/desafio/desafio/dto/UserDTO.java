@@ -1,5 +1,6 @@
 package com.desafio.desafio.dto;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +19,7 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private String email;
-    private Date birthday;
+    private LocalDate birthday;
     private String login;
     private String password;
     private String phone;

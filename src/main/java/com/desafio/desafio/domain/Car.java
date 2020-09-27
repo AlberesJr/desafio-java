@@ -12,6 +12,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+* Classe de objetos do tipo "Car"
+* 
+* @author Alberes Jr
+* @version 1.0.0
+*/
+
 @Entity
 @Getter
 @Setter

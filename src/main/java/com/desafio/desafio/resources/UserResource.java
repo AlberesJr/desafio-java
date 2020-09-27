@@ -1,10 +1,14 @@
 package com.desafio.desafio.resources;
 
+import com.desafio.desafio.domain.Car;
 import com.desafio.desafio.domain.User;
 import com.desafio.desafio.dto.UserDTO;
+import com.desafio.desafio.exceptions.ErrorMessage;
+import com.desafio.desafio.service.CarService;
 import com.desafio.desafio.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +28,12 @@ import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+* Classe responsável pelo acesso de recursos de "User"
+* 
+* @author Alberes Jr
+* @version 1.0.0
+*/
 @RestController
 @RequestMapping(value = "/api")
 @Api(tags = "Usuários")
@@ -31,6 +41,9 @@ public class UserResource {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private CarService carService;
 
     @GetMapping(value = "/me")
     @ApiOperation(tags = {"Usuários"}, value = "Retorna informações do usuário logado")
@@ -55,21 +68,50 @@ public class UserResource {
 
     @PostMapping(value = "/users")
     @ApiOperation(tags = {"Usuários"}, value = "Cadatra um novo usuário")
-    public ResponseEntity<UserDTO> createUser(@RequestBody User user) throws Exception {
+    public ResponseEntity<Object> createUser(@RequestBody User user) throws Exception {
+        ErrorMessage er = new ErrorMessage();
+
+        User obj = userService.findByEmail(user.getEmail());
+        if (obj != null){
+            er.setMessage("Email already exists");
+            return new ResponseEntity<Object>(er, new HttpHeaders(), HttpStatus.valueOf(er.getErrorCode()));
+        }
+        obj = userService.findByLogin(user.getLogin());
+        if (obj != null) {
+            er.setMessage("Login already exists");
+            return new ResponseEntity<Object>(er, new HttpHeaders(), HttpStatus.valueOf(er.getErrorCode()));
+        }
 
         Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
         user.setCreatedAt(new java.sql.Timestamp(now.getTime()));
 
         UserDTO userDto = new UserDTO(userService.create(user));
+        for (Car car : user.getCars()) {
+            car.setUser(user);
+            carService.create(car);
+        }
         return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/users/{id}")
     @ApiOperation(value = "Atualiza um usuário pelo id")
-    public ResponseEntity<User> update(@RequestBody User obj, @PathVariable Integer id) {
-        obj.setId(id);
-        userService.update(obj);
+    public ResponseEntity<Object> update(@RequestBody User user, @PathVariable Integer id) {
+        
+        User obj = userService.findByEmail(user.getEmail());
+        if (obj != null){
+            ErrorMessage er = new ErrorMessage("Email already exists", 400);
+            return new ResponseEntity<Object>(er, new HttpHeaders(), HttpStatus.valueOf(er.getErrorCode()));
+        }
+        obj = userService.findByLogin(user.getLogin());
+        if (obj != null) {
+            ErrorMessage er = new ErrorMessage("Login already exists", 400);
+            er.setMessage("Login already exists");
+            return new ResponseEntity<Object>(er, new HttpHeaders(), HttpStatus.valueOf(er.getErrorCode()));
+        }
+        
+        user.setId(id);
+        userService.update(user);
         return ResponseEntity.noContent().build();
     }
 

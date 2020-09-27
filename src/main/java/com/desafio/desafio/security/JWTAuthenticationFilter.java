@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.desafio.desafio.domain.User;
 import com.desafio.desafio.dto.CredetialsDTO;
-import com.desafio.desafio.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,8 +19,6 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
-    private UserService service = new UserService();
 
     private final AuthenticationManager authenticationManager;
 
@@ -57,12 +54,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             final FilterChain filter, final Authentication auth) throws IOException, ServletException {
 
         final String login = ((UserSpringSecurity) auth.getPrincipal()).getUsername();
-        System.out.println(login);
         final String token = jwtUtil.generateToken(login);
         res.addHeader("Authorization", "Bearer " + token);
-        res.setContentType("application/json"); 
-        User obj = jwtUtil.findUserByLogin(login);
-        // res.getWriter().append(jsonSuccess(obj));
+        res.setContentType("application/json");
+        jwtUtil.updateUserLastLogin(login);
+        // User obj = jwtUtil.findUserByLogin(login);
+        // String json = new Gson().toJson(obj);
+        // System.out.println(json);
+        // obj = new ObjectMapper().readValue(jsonSuccess(obj), User.class);
+        // res.getWriter().append(json);
     }
 
     private String jsonSuccess(User obj){
@@ -80,6 +80,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         @Override
         public void onAuthenticationFailure(final HttpServletRequest request, final HttpServletResponse response, final AuthenticationException exception)
                 throws IOException, ServletException {
+            // if(exception.getClass().isAssignableFrom(UsernameNotFoundException.class){
+            //     response.getWriter().app;
+            // }
             response.setStatus(401);
             response.setContentType("application/json"); 
             response.getWriter().append(json());
